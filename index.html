@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Sapa AJAX</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f5f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: white;
+            width: 400px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            display: block;
+            margin: 15px auto;
+            padding: 10px 25px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #response {
+            padding: 12px;
+            margin-top: 15px;
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        #response.error {
+            background-color: #ffe5e5;
+            border: 1px solid #ff5555;
+            color: #cc0000;
+        }
+
+        #response.success {
+            background-color: #e5ffe9;
+            border: 1px solid #55cc70;
+            color: #008020;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Form Sapa Menggunakan AJAX dan PHP</h2>
+
+        <label for="nama">Masukkan Nama Anda:</label>
+        <input type="text" id="nama" placeholder="Contoh: Alex">
+
+        <button type="button" id="kirim">Kirim</button>
+
+        <h3>Respon Server:</h3>
+
+        <div id="response">
+            Menunggu input...
+        </div>
+    </div>
+
+    <script>
+    const inputNama = document.getElementById("nama");
+    const tombolKirim = document.getElementById("kirim");
+    const responseArea = document.getElementById("response");
+
+    tombolKirim.addEventListener("click", function() {
+
+        const nama = inputNama.value.trim();
+
+        fetch("server.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: "nama=" + encodeURIComponent(nama)
+        })
+
+        .then(response => response.text())
+
+        .then(data => {
+            responseArea.textContent = data;
+            if (data.includes("Input nama tidak boleh kosong")) {
+                responseArea.className = "error";
+            } else {
+                responseArea.className = "success";
+            }
+        })
+
+        .catch(error => {
+            responseArea.textContent = "Terjadi kesalahan: " + error;
+        });
+
+    });
+    </script>
+</body>
+</html>
